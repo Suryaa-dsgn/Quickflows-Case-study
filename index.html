@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Quickflows.ai · Product Design Case Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,700;1,9..144,300;1,9..144,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#FAFAF7;
+  --bg-2:#F2F1EB;
+  --bg-3:#E9E7E0;
+  --text:#1A1917;
+  --muted:#6A6860;
+  --border:#E2DFD6;
+  --accent:#6D1FC7;
+  --accent-2:#EEE5FF;
+  --accent-3:#D9CAFF;
+  --green:#15803D;
+  --green-bg:#DCFCE7;
+  --red:#B91C1C;
+  --red-bg:#FEE2E2;
+  --serif:'Fraunces',Georgia,serif;
+  --sans:'DM Sans',system-ui,sans-serif;
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased}
+
+/* ─── LAYOUT ─────────────────────────────────── */
+.c{max-width:720px;margin:0 auto;padding:0 28px}
+.cw{max-width:1080px;margin:0 auto;padding:0 28px}
+.label{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+
+/* ─── NAV ─────────────────────────────────────── */
+nav{position:sticky;top:0;z-index:100;background:rgba(250,250,247,.92);backdrop-filter:blur(14px);border-bottom:1px solid var(--border);padding:14px 28px;display:flex;justify-content:space-between;align-items:center}
+.nav-dot{width:7px;height:7px;border-radius:50%;background:var(--accent);display:inline-block;margin-right:10px}
+.nav-l{font-size:13px;font-weight:500;color:var(--text)}
+.nav-r{font-size:12px;color:var(--muted)}
+
+/* ─── HERO ────────────────────────────────────── */
+.hero{padding:92px 0 72px;border-bottom:1px solid var(--border)}
+.hero-chip{display:inline-flex;align-items:center;gap:8px;background:var(--accent-2);color:var(--accent);font-size:11.5px;font-weight:500;padding:5px 14px;border-radius:20px;margin-bottom:30px;letter-spacing:.02em}
+.hero h1{font-family:var(--serif);font-size:clamp(38px,6vw,66px);font-weight:600;line-height:1.08;letter-spacing:-.03em;margin-bottom:22px;max-width:680px}
+.hero h1 em{font-style:italic;font-weight:300;color:var(--accent)}
+.hero-sub{font-size:17px;color:var(--muted);line-height:1.75;max-width:540px;margin-bottom:44px}
+.meta-row{display:flex;gap:0;flex-wrap:wrap;border:1px solid var(--border);border-radius:10px;overflow:hidden;width:fit-content}
+.meta-item{padding:12px 22px;display:flex;flex-direction:column;gap:2px;border-right:1px solid var(--border)}
+.meta-item:last-child{border-right:none}
+.meta-val{font-size:13.5px;font-weight:500;color:var(--text)}
+.meta-key{font-size:11px;color:var(--muted)}
+.hero-img{margin-top:52px;border-radius:14px;overflow:hidden;border:1px solid var(--border)}
+.hero-img img{width:100%;display:block}
+
+/* ─── SECTION BASE ────────────────────────────── */
+section{padding:88px 0;border-bottom:1px solid var(--border)}
+section:last-of-type{border-bottom:none}
+.s-label{margin-bottom:10px}
+.s-title{font-family:var(--serif);font-size:clamp(28px,4vw,42px);font-weight:600;line-height:1.15;letter-spacing:-.025em;margin-bottom:22px}
+.s-title em{font-style:italic;font-weight:300;color:var(--accent)}
+.s-body{font-size:15.5px;color:var(--muted);line-height:1.8;max-width:580px}
+.s-body p+p{margin-top:16px}
+.s-body strong{color:var(--text);font-weight:500}
+
+/* ─── PROBLEM GRID ────────────────────────────── */
+.prob-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border);border:1px solid var(--border);border-radius:14px;overflow:hidden;margin-top:44px}
+.prob-item{background:var(--bg);padding:28px 24px}
+.prob-n{font-size:10px;font-weight:500;color:var(--muted);letter-spacing:.08em;text-transform:uppercase;margin-bottom:8px}
+.prob-t{font-size:14.5px;font-weight:500;color:var(--text);margin-bottom:7px}
+.prob-d{font-size:13px;color:var(--muted);line-height:1.65}
+
+/* ─── CALLOUT ─────────────────────────────────── */
+.callout{background:var(--accent-2);border-left:3px solid var(--accent);border-radius:0 10px 10px 0;padding:22px 26px;margin:36px 0}
+.callout p{font-family:var(--serif);font-size:19px;font-weight:400;line-height:1.5;color:var(--text)}
+.callout em{color:var(--accent);font-style:italic}
+
+/* ─── DIAGRAM BOX ─────────────────────────────── */
+.diag-box{margin:40px 0;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:var(--bg)}
+.diag-head{padding:12px 20px;border-bottom:1px solid var(--border);font-size:11px;font-weight:500;color:var(--muted);letter-spacing:.06em;text-transform:uppercase}
+.diag-body{padding:32px 24px;overflow-x:auto}
+.diag-body svg{min-width:500px}
+
+/* ─── FEATURE BLOCKS ──────────────────────────── */
+.feat{margin-bottom:76px}
+.feat:last-child{margin-bottom:0}
+.feat-n{font-size:11px;font-weight:500;color:var(--accent);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
+.feat-t{font-family:var(--serif);font-size:clamp(22px,3vw,30px);font-weight:600;line-height:1.2;letter-spacing:-.02em;margin-bottom:14px}
+.feat-d{font-size:15px;color:var(--muted);line-height:1.75;max-width:560px}
+.feat-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.feat-tag{font-size:11px;font-weight:500;padding:4px 11px;border-radius:20px;border:1px solid var(--border);color:var(--muted);background:var(--bg)}
+
+/* ─── IMAGE SHOWCASES ─────────────────────────── */
+.img-wrap{background:var(--bg-2);border:1px solid var(--border);border-radius:16px;padding:32px;margin:28px auto;display:flex;gap:20px;justify-content:center;align-items:flex-start;flex-wrap:wrap}
+.img-wrap img{border-radius:10px;border:1px solid var(--border);box-shadow:0 2px 16px rgba(0,0,0,.06);object-fit:contain}
+.img-wrap.flush{padding:0;border-radius:14px}
+.img-wrap.flush img{border-radius:0;border:none;box-shadow:none;width:100%;max-height:none}
+.img-wrap.side2 img{height:500px;max-width:420px;flex:1 1 260px}
+.img-wrap.side3 img{height:460px;max-width:360px;flex:1 1 220px}
+
+/* ─── ANNOTATIONS ─────────────────────────────── */
+.annots{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-top:22px}
+.ann{display:flex;gap:12px;align-items:flex-start}
+.ann-dot{min-width:22px;height:22px;border-radius:50%;background:var(--accent-2);border:1.5px solid var(--accent-3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:600;color:var(--accent);margin-top:1px;flex-shrink:0}
+.ann p{font-size:13px;color:var(--muted);line-height:1.65}
+.ann strong{color:var(--text);font-weight:500}
+
+/* ─── HARD CALLS ──────────────────────────────── */
+.hc{border:1px solid var(--border);border-radius:14px;padding:30px;margin-bottom:16px;background:var(--bg)}
+.hc-q{font-family:var(--serif);font-size:19px;font-weight:500;line-height:1.4;color:var(--text);margin-bottom:14px}
+.hc-q::before{content:'\201C';font-size:34px;color:var(--accent);line-height:0;vertical-align:-.4em;margin-right:3px;font-family:var(--serif)}
+.hc-a{font-size:14px;color:var(--muted);line-height:1.75}
+.hc-a strong{color:var(--text);font-weight:500}
+
+/* ─── VISUAL SYSTEM ───────────────────────────── */
+.color-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-top:24px}
+.color-card{border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.color-swatch{height:52px}
+.color-info{padding:13px 16px}
+.color-name{font-size:13px;font-weight:500;margin-bottom:4px}
+.color-desc{font-size:12px;color:var(--muted);line-height:1.55}
+.principles{display:grid;grid-template-columns:1fr 1fr;gap:1px;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:var(--border);margin-top:20px}
+.prin-item{background:var(--bg);padding:26px}
+.prin-t{font-size:13.5px;font-weight:500;margin-bottom:8px}
+.prin-d{font-size:13px;color:var(--muted);line-height:1.65}
+
+/* ─── REFLECTION ──────────────────────────────── */
+.reflect-body{font-family:var(--serif);font-size:clamp(20px,3vw,27px);font-weight:300;line-height:1.65;color:var(--text)}
+.reflect-body em{font-style:italic;color:var(--accent)}
+.reflect-body p+p{margin-top:28px}
+
+/* ─── FOOTER ──────────────────────────────────── */
+footer{padding:52px 0;border-top:1px solid var(--border)}
+footer p{font-size:13px;color:var(--muted)}
+footer a{color:var(--accent);text-decoration:none;font-weight:500}
+footer a:hover{text-decoration:underline}
+
+/* ─── SCROLL FADE ─────────────────────────────── */
+.fade-in{opacity:0;transform:translateY(18px);transition:opacity .55s ease,transform .55s ease}
+.fade-in.visible{opacity:1;transform:none}
+
+/* ─── RESPONSIVE ──────────────────────────────── */
+@media(max-width:680px){
+  .prob-grid{grid-template-columns:1fr}
+  .meta-row{flex-direction:column;width:100%}
+  .meta-item{border-right:none;border-bottom:1px solid var(--border)}
+  .meta-item:last-child{border-bottom:none}
+  .principles{grid-template-columns:1fr}
+  .img-wrap.side2 img,.img-wrap.side3 img{height:auto;max-width:100%;width:100%}
+}
+</style>
+<link rel="stylesheet" href="responsive.css">
+<link rel="stylesheet" href="sidebar.css">
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════
+     NAV
+════════════════════════════════════════════ -->
+<nav>
+  <span class="nav-l"><span class="nav-dot"></span>Suryakanta Jena &middot; Product Design Intern</span>
+  <span class="nav-r">Quickflows.ai &nbsp;&middot;&nbsp; 2025</span>
+  <button id="sb-hamburger" aria-label="Open navigation" aria-expanded="false">
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2 4.5h14M2 9h14M2 13.5h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    </svg>
+  </button>
+</nav>
+
+<!-- ════════════════════════════════════════════
+     SIDEBAR
+════════════════════════════════════════════ -->
+<aside id="sidebar" aria-label="Page navigation">
+  <nav class="sb-nav">
+
+    <a href="#context" class="sb-item sb-section" data-section="context">
+      <span class="sb-dot"></span>Context
+    </a>
+
+    <a href="#product-understanding" class="sb-item sb-section" data-section="product-understanding">
+      <span class="sb-dot"></span>Product Understanding
+    </a>
+
+    <div class="sb-divider"></div>
+
+    <div class="sb-group">
+      <button class="sb-item sb-section sb-expandable" data-section="design-work" aria-expanded="false">
+        <span class="sb-dot"></span>Design Work
+        <svg class="sb-chevron" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M5 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <div class="sb-children">
+        <a href="#feat-login" class="sb-item sb-child" data-section="feat-login">Feature 01 &mdash; Entry Point</a>
+        <a href="#feat-dashboard" class="sb-item sb-child" data-section="feat-dashboard">Feature 02 &mdash; Command Center</a>
+        <a href="#feat-shift-details" class="sb-item sb-child" data-section="feat-shift-details">Feature 03 &mdash; Shift Details</a>
+        <a href="#feat-nurse-assignment" class="sb-item sb-child" data-section="feat-nurse-assignment">Feature 04 &mdash; Nurse Assignment</a>
+        <a href="#feat-profiles" class="sb-item sb-child" data-section="feat-profiles">Feature 05 &mdash; Profile System</a>
+        <a href="#feat-schedule" class="sb-item sb-child" data-section="feat-schedule">Feature 06 &mdash; Schedule System</a>
+        <a href="#feat-staff-mgmt" class="sb-item sb-child" data-section="feat-staff-mgmt">Feature 07 &mdash; Staff Management</a>
+        <a href="#feat-audit-logs" class="sb-item sb-child" data-section="feat-audit-logs">Feature 08 &mdash; Audit Logs</a>
+      </div>
+    </div>
+
+    <div class="sb-divider"></div>
+
+    <a href="#visual-system" class="sb-item sb-section" data-section="visual-system">
+      <span class="sb-dot"></span>Visual System
+    </a>
+
+    <a href="#ux-decisions" class="sb-item sb-section" data-section="ux-decisions">
+      <span class="sb-dot"></span>UX Decisions
+    </a>
+
+    <a href="#reflection" class="sb-item sb-section" data-section="reflection">
+      <span class="sb-dot"></span>Reflection
+    </a>
+
+  </nav>
+</aside>
+<div id="sidebar-overlay"></div>
+
+<!-- ════════════════════════════════════════════
+     HERO
+════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="c">
+    <div class="hero-chip">&#9679;&nbsp; Product Design Case Study</div>
+    <h1>Designing <em>clarity</em><br>for home healthcare<br>operations</h1>
+    <p class="hero-sub">4 months embedded inside Quickflows.ai — a real-time, constraint-aware coordination platform — designing the decision layer that assigns the right nurse to the right patient, every time.</p>
+    <div class="meta-row">
+      <div class="meta-item">
+        <span class="meta-val">Quickflows.ai</span>
+        <span class="meta-key">Company</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-val">Product Design Intern</span>
+        <span class="meta-key">Role</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-val">Aug 12 – Dec 10, 2025</span>
+        <span class="meta-key">Duration</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-val">15+ Screens</span>
+        <span class="meta-key">Delivered</span>
+      </div>
+    </div>
+  </div>
+  <div class="cw">
+    <div class="hero-img" style="margin-top:52px">
+      <img src="images/Main_Dashboard.png" alt="Quickflows.ai Main Dashboard">
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     01 — CONTEXT
+════════════════════════════════════════════ -->
+<section id="context">
+  <div class="c fade-in">
+    <p class="s-label label">01 — Context</p>
+    <h2 class="s-title">Home healthcare coordination<br>is <em>operationally brutal</em></h2>
+    <div class="s-body">
+      <p>A care coordinator at a home healthcare agency may manage 200+ shifts in a single day. Each shift represents a patient — often elderly, often medically complex — who needs a specific type of nurse, at a specific address, at a specific time.</p>
+      <p>Nurses cancel. Patients have last-minute changes. Certifications expire. Travel distances make some assignments impossible. And every unfilled shift isn't a missed calendar entry — it's a 70-year-old who doesn't get their wound dressed today.</p>
+      <p>Quickflows.ai exists to solve this. It's a real-time platform that helps coordinators manage this operational complexity — and increasingly, automates parts of it through AI agents.</p>
+    </div>
+    <div class="prob-grid">
+      <div class="prob-item">
+        <div class="prob-n">01</div>
+        <div class="prob-t">The Matching Problem</div>
+        <div class="prob-d">Assigning a nurse involves 5+ simultaneous variables: certification, skills, availability, distance, workload, and reliability score.</div>
+      </div>
+      <div class="prob-item">
+        <div class="prob-n">02</div>
+        <div class="prob-t">The Scheduling Problem</div>
+        <div class="prob-d">Recurring patterns must stay stable, but real-world disruptions — call-offs, swaps, emergencies — happen constantly and unpredictably.</div>
+      </div>
+      <div class="prob-item">
+        <div class="prob-n">03</div>
+        <div class="prob-t">The Reliability Problem</div>
+        <div class="prob-d">Shifts must be filled and completed. Late assignments and no-shows are tracked and minimised as system-level metrics.</div>
+      </div>
+      <div class="prob-item">
+        <div class="prob-n">04</div>
+        <div class="prob-t">The Visibility Problem</div>
+        <div class="prob-d">Coordinators need real-time insight: which shifts are at risk, which nurses are available, and what the AI agents are doing autonomously.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     02 — PRODUCT UNDERSTANDING
+════════════════════════════════════════════ -->
+<section id="product-understanding">
+  <div class="c fade-in">
+    <p class="s-label label">02 — Product Understanding</p>
+    <h2 class="s-title">Two weeks understanding<br>the system <em>before designing</em></h2>
+    <div class="s-body">
+      <p>Most designers open Figma immediately. I didn't. Quickflows.ai runs on a complex entity graph — and any UI that doesn't reflect that underlying model would fail the people relying on it.</p>
+      <p>The core insight from this discovery phase shaped every screen I built afterward:</p>
+    </div>
+
+    <div class="callout">
+      <p>Quickflows.ai is <em>not a scheduling tool</em>. It's a decision-support system that continuously minimises the probability of unfilled or failed shifts under real-world constraints.</p>
+    </div>
+
+    <div class="s-body">
+      <p>This distinction changes what every screen must communicate. It's not about showing a calendar — it's about surfacing the right action, at the right moment, with the right context to act confidently.</p>
+    </div>
+
+    <!-- ENTITY MODEL -->
+    <div class="diag-box">
+      <div class="diag-head">System entity model — how the core objects relate</div>
+      <div class="diag-body">
+        <svg width="100%" viewBox="0 0 660 200">
+          <defs>
+            <marker id="a1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="#9B7CC8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+            <marker id="a2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="#86EFAC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+            <marker id="a3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="#FDE047" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+          </defs>
+          <!-- Patient -->
+          <rect x="20" y="76" width="108" height="48" rx="8" fill="#EEE5FF" stroke="#C4A4EE" stroke-width="1"/>
+          <text x="74" y="98" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#4C1D95">Patient</text>
+          <text x="74" y="114" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#7C3AED">receives care</text>
+          <!-- Schedule -->
+          <rect x="186" y="16" width="112" height="48" rx="8" fill="#E0F2FE" stroke="#7DD3FC" stroke-width="1"/>
+          <text x="242" y="38" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#075985">Schedule</text>
+          <text x="242" y="54" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#0284C7">defines pattern</text>
+          <!-- Shift -->
+          <rect x="340" y="76" width="108" height="48" rx="8" fill="#EEE5FF" stroke="#C4A4EE" stroke-width="1"/>
+          <text x="394" y="98" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#4C1D95">Shift</text>
+          <text x="394" y="114" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#7C3AED">time-bound unit</text>
+          <!-- Assignment -->
+          <rect x="340" y="148" width="108" height="44" rx="8" fill="#FEFCE8" stroke="#FDE047" stroke-width="1"/>
+          <text x="394" y="168" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#713F12">Assignment</text>
+          <text x="394" y="183" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#92400E">links shift ↔ nurse</text>
+          <!-- Nurse -->
+          <rect x="524" y="76" width="108" height="48" rx="8" fill="#DCFCE7" stroke="#86EFAC" stroke-width="1"/>
+          <text x="578" y="98" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="#14532D">Nurse</text>
+          <text x="578" y="114" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11" fill="#166534">provides care</text>
+          <!-- Arrows -->
+          <line x1="128" y1="92" x2="184" y2="54" stroke="#C4A4EE" stroke-width="1.5" marker-end="url(#a1)"/>
+          <text x="144" y="74" font-family="DM Sans,sans-serif" font-size="10" fill="#9B7CC8">has</text>
+          <line x1="298" y1="54" x2="338" y2="90" stroke="#7DD3FC" stroke-width="1.5" marker-end="url(#a1)"/>
+          <text x="302" y="75" font-family="DM Sans,sans-serif" font-size="10" fill="#9B7CC8">generates</text>
+          <line x1="128" y1="100" x2="338" y2="100" stroke="#C4A4EE" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#a1)"/>
+          <text x="220" y="93" font-family="DM Sans,sans-serif" font-size="10" fill="#9B7CC8">belongs to</text>
+          <line x1="394" y1="124" x2="394" y2="146" stroke="#FDE047" stroke-width="1.5" marker-end="url(#a3)"/>
+          <line x1="450" y1="170" x2="522" y2="112" stroke="#86EFAC" stroke-width="1.5" marker-end="url(#a2)"/>
+          <text x="488" y="142" font-family="DM Sans,sans-serif" font-size="10" fill="#9B7CC8">fills</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- SHIFT LIFECYCLE -->
+    <div class="diag-box">
+      <div class="diag-head">Shift lifecycle — state machine</div>
+      <div class="diag-body">
+        <svg width="100%" viewBox="0 0 660 130">
+          <defs>
+            <marker id="b1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="#A78BFA" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+            <marker id="b2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="#86EFAC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+            <marker id="b3" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="#FCA5A5" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+          </defs>
+          <rect x="20" y="40" width="90" height="38" rx="7" fill="#F3F4F6" stroke="#D1D5DB" stroke-width="1"/>
+          <text x="65" y="59" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="500" fill="#374151">Created</text>
+          <line x1="110" y1="59" x2="148" y2="59" stroke="#A78BFA" stroke-width="1.5" marker-end="url(#b1)"/>
+          <rect x="150" y="40" width="90" height="38" rx="7" fill="#FEE2E2" stroke="#FCA5A5" stroke-width="1"/>
+          <text x="195" y="59" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="500" fill="#991B1B">Unfilled</text>
+          <line x1="240" y1="59" x2="278" y2="59" stroke="#A78BFA" stroke-width="1.5" marker-end="url(#b1)"/>
+          <rect x="280" y="40" width="90" height="38" rx="7" fill="#EEE5FF" stroke="#C4A4EE" stroke-width="1"/>
+          <text x="325" y="59" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="500" fill="#4C1D95">Assigned</text>
+          <line x1="370" y1="51" x2="408" y2="30" stroke="#86EFAC" stroke-width="1.5" marker-end="url(#b2)"/>
+          <line x1="370" y1="67" x2="408" y2="86" stroke="#FCA5A5" stroke-width="1.5" marker-end="url(#b3)"/>
+          <rect x="410" y="14" width="100" height="36" rx="7" fill="#DCFCE7" stroke="#86EFAC" stroke-width="1"/>
+          <text x="460" y="33" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="500" fill="#14532D">Completed</text>
+          <rect x="410" y="72" width="100" height="36" rx="7" fill="#FEE2E2" stroke="#FCA5A5" stroke-width="1"/>
+          <text x="460" y="91" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="12" font-weight="500" fill="#991B1B">Cancelled</text>
+          <text x="530" y="38" font-family="DM Sans,sans-serif" font-size="10" font-weight="500" fill="#9B7CC8">Event modifiers ↗</text>
+          <text x="530" y="52" font-family="DM Sans,sans-serif" font-size="10" fill="#9B7CC8">Ad-hoc &middot; Swapped</text>
+          <text x="530" y="64" font-family="DM Sans,sans-serif" font-size="10" fill="#9B7CC8">Called off &middot; Extra</text>
+          <text x="20" y="118" font-family="DM Sans,sans-serif" font-size="10" fill="#9CA3AF">Assignment runs in parallel: Suggested &#8594; Pending &#8594; Accepted &#8594; Rejected</text>
+        </svg>
+      </div>
+    </div>
+
+    <!-- INFORMATION ARCHITECTURE -->
+    <div class="diag-box">
+      <div class="diag-head">Information architecture — screens I designed across the product</div>
+      <div class="diag-body">
+        <svg width="100%" viewBox="0 0 660 270">
+          <defs>
+            <marker id="c1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+              <path d="M2 1L8 5L2 9" fill="none" stroke="#D1D5DB" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </marker>
+          </defs>
+          <!-- Root -->
+          <rect x="240" y="110" width="152" height="48" rx="10" fill="#6D1FC7" stroke="none"/>
+          <text x="316" y="130" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="13" font-weight="500" fill="white">Quickflows.ai</text>
+          <text x="316" y="147" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10.5" fill="rgba(255,255,255,.65)">Home Care Platform</text>
+
+          <!-- Left: Dashboard -->
+          <line x1="240" y1="122" x2="148" y2="46" stroke="#D1D5DB" stroke-width="1" marker-end="url(#c1)"/>
+          <rect x="54" y="18" width="92" height="38" rx="7" fill="#EEE5FF" stroke="#C4A4EE" stroke-width="1"/>
+          <text x="100" y="34" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11.5" font-weight="500" fill="#4C1D95">Dashboard</text>
+          <text x="100" y="48" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#7C3AED">Command center</text>
+
+          <!-- Left: Shifts -->
+          <line x1="240" y1="134" x2="148" y2="134" stroke="#D1D5DB" stroke-width="1" marker-end="url(#c1)"/>
+          <rect x="54" y="112" width="92" height="38" rx="7" fill="#EEE5FF" stroke="#C4A4EE" stroke-width="1"/>
+          <text x="100" y="128" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11.5" font-weight="500" fill="#4C1D95">Shifts</text>
+          <text x="100" y="142" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#7C3AED">Details &middot; Assignment</text>
+
+          <!-- Left: Audit Logs -->
+          <line x1="240" y1="144" x2="148" y2="218" stroke="#D1D5DB" stroke-width="1" marker-end="url(#c1)"/>
+          <rect x="54" y="200" width="92" height="38" rx="7" fill="#EEE5FF" stroke="#C4A4EE" stroke-width="1"/>
+          <text x="100" y="216" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11.5" font-weight="500" fill="#4C1D95">Audit Logs</text>
+          <text x="100" y="230" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#7C3AED">Transparency</text>
+
+          <!-- Right: Patients -->
+          <line x1="392" y1="134" x2="456" y2="134" stroke="#D1D5DB" stroke-width="1" marker-end="url(#c1)"/>
+          <rect x="458" y="112" width="98" height="38" rx="7" fill="#DCFCE7" stroke="#86EFAC" stroke-width="1"/>
+          <text x="507" y="128" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11.5" font-weight="500" fill="#14532D">Patients</text>
+          <text x="507" y="142" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#166534">Profile &middot; Schedule</text>
+
+          <!-- Right: Staff -->
+          <line x1="392" y1="122" x2="456" y2="46" stroke="#D1D5DB" stroke-width="1" marker-end="url(#c1)"/>
+          <rect x="458" y="18" width="98" height="38" rx="7" fill="#DCFCE7" stroke="#86EFAC" stroke-width="1"/>
+          <text x="507" y="34" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11.5" font-weight="500" fill="#14532D">Staff</text>
+          <text x="507" y="48" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#166534">Management &middot; Profile</text>
+
+          <!-- Right: Access Control -->
+          <line x1="392" y1="144" x2="456" y2="218" stroke="#D1D5DB" stroke-width="1" marker-end="url(#c1)"/>
+          <rect x="458" y="200" width="98" height="38" rx="7" fill="#FEF9C3" stroke="#FDE047" stroke-width="1"/>
+          <text x="507" y="216" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="11.5" font-weight="500" fill="#713F12">Access Control</text>
+          <text x="507" y="230" text-anchor="middle" font-family="DM Sans,sans-serif" font-size="10" fill="#92400E">Roles &middot; Permissions</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     03 — DESIGN WORK
+════════════════════════════════════════════ -->
+<section id="design-work">
+  <div class="c fade-in">
+    <p class="s-label label">03 — Design Work</p>
+    <h2 class="s-title">The screens,<br><em>in the order a coordinator lives them</em></h2>
+    <div class="s-body">
+      <p>Organized not by delivery date, but by the natural flow of how a coordinator experiences the product — from overview, to shift action, to the people and systems underneath.</p>
+    </div>
+  </div>
+
+  <!-- 3.1 LOGIN -->
+  <div id="feat-login" class="cw" style="margin-top:64px">
+    <div class="feat fade-in">
+      <div class="c">
+        <div class="feat-n">Feature 01 &mdash; Entry Point</div>
+        <h3 class="feat-t">Login — the product's first impression</h3>
+        <p class="feat-d">The login screen doubles as brand positioning. The left panel previews three core product capabilities — AI agents, shift timeline, and urgent alerts — establishing stakes before the user ever signs in. First impressions set expectations.</p>
+        <div class="feat-tags">
+          <span class="feat-tag">Brand composition</span>
+          <span class="feat-tag">Visual hierarchy</span>
+        </div>
+      </div>
+      <div class="img-wrap" style="max-width:1080px;margin-top:28px">
+        <img src="images/Login_1.png" alt="Login screen" style="max-width:820px;width:100%">
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.2 DASHBOARD -->
+  <div id="feat-dashboard" class="cw" style="margin-top:72px">
+    <div class="feat fade-in">
+      <div class="c">
+        <div class="feat-n">Feature 02 &mdash; Command Center</div>
+        <h3 class="feat-t">Dashboard — designed for decision velocity</h3>
+        <p class="feat-d">A coordinator opening the app needs to know in under 5 seconds: what's broken, what's at risk, what needs action. The layout is deliberately tiered by urgency — AI agent activity at top, key metrics in the middle, urgent alerts on the right rail, and the full shift table below for deeper investigation.</p>
+        <div class="feat-tags">
+          <span class="feat-tag">Information hierarchy</span>
+          <span class="feat-tag">Data density</span>
+          <span class="feat-tag">AI visibility</span>
+        </div>
+      </div>
+      <div class="img-wrap flush" style="max-width:1080px;margin-top:28px">
+        <img src="images/Main_Dashboard.png" alt="Main Dashboard">
+      </div>
+      <div class="c" style="margin-top:22px">
+        <div class="annots">
+          <div class="ann"><div class="ann-dot">1</div><p><strong>AI agent status bar</strong> — 3 autonomous agents with active task counts. Makes the system feel alive and auditable, not like a black box.</p></div>
+          <div class="ann"><div class="ann-dot">2</div><p><strong>4 stat cards</strong> — all shifts, swap suggestions, assigned, open — each with trend indicators and contextual sub-labels for instant orientation.</p></div>
+          <div class="ann"><div class="ann-dot">3</div><p><strong>Urgent alerts panel</strong> — High/Medium severity badges with patient name, time, and a "Take Action" CTA. Priority queue on the right rail, always visible.</p></div>
+          <div class="ann"><div class="ann-dot">4</div><p><strong>Smart alert bar</strong> — pinned banner listing the 3 most critical issues (overdue shifts, no nearby nurses) with direct view links.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.3 SHIFT DETAILS -->
+  <div id="feat-shift-details" class="cw" style="margin-top:72px">
+    <div class="feat fade-in">
+      <div class="c">
+        <div class="feat-n">Feature 03 &mdash; Core Feature</div>
+        <h3 class="feat-t">Shift Details — one screen, two radically different states</h3>
+        <p class="feat-d">This is the product's most critical screen. A shift is either Filled or Unfilled — and the entire interface adapts to reflect which action is needed. Green says "you're covered." Red says "act now." The design language is non-negotiable.</p>
+        <div class="feat-tags">
+          <span class="feat-tag">State-driven design</span>
+          <span class="feat-tag">Color semantics</span>
+          <span class="feat-tag">Progressive disclosure</span>
+          <span class="feat-tag">Audit trail</span>
+        </div>
+      </div>
+      <div class="img-wrap" style="max-width:1080px;margin-top:28px">
+        <img src="images/Shift_details_final.png" alt="Shift Details — both states" style="width:100%;max-width:900px">
+      </div>
+      <div class="c" style="margin-top:22px">
+        <div class="annots">
+          <div class="ann"><div class="ann-dot">1</div><p><strong>Header color = shift status.</strong> Green → filled ("Swap" available). Red → unfilled ("Find Agents" prominent). State is never ambiguous.</p></div>
+          <div class="ann"><div class="ann-dot">2</div><p><strong>Filled state</strong> shows the nurse inline with a Cancel button. The "Alternative Staff Available" block lets coordinators upgrade without disrupting the existing assignment.</p></div>
+          <div class="ann"><div class="ann-dot">3</div><p><strong>Unfilled state</strong> shows a red alert card with two clear paths — Manual Selection or Auto-Assign Best Match — letting coordinators choose their level of involvement.</p></div>
+          <div class="ann"><div class="ann-dot">4</div><p><strong>Timeline</strong> in both states provides a living audit trail — who did what and when — transforming a static shift record into a decision history.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.4 NURSE ASSIGNMENT -->
+  <div id="feat-nurse-assignment" class="cw" style="margin-top:72px">
+    <div class="feat fade-in">
+      <div class="c">
+        <div class="feat-n">Feature 04 &mdash; Decision Support</div>
+        <h3 class="feat-t">Nurse Assignment — fast decisions with the right information</h3>
+        <p class="feat-d">When a coordinator assigns or swaps a nurse, they need to evaluate candidates quickly under time pressure. The design challenge: surface enough information for a confident decision without creating cognitive overload. Three states, one panel.</p>
+        <div class="feat-tags">
+          <span class="feat-tag">Scannable cards</span>
+          <span class="feat-tag">Tab navigation</span>
+          <span class="feat-tag">Empty state design</span>
+          <span class="feat-tag">AI automation</span>
+        </div>
+      </div>
+      <div class="img-wrap" style="max-width:1080px;margin-top:28px">
+        <img src="images/Assign_nurse_Filled_1.png" alt="Nurse Assignment panel — 3 states" style="width:100%;max-width:960px">
+      </div>
+      <div class="c" style="margin-top:22px">
+        <div class="annots">
+          <div class="ann"><div class="ann-dot">1</div><p><strong>Swap vs Matches tabs</strong> split intent before the user sees a list. Swap replaces the current nurse; Matches surfaces AI-ranked best-fit candidates.</p></div>
+          <div class="ann"><div class="ann-dot">2</div><p><strong>4 decision signals only</strong> — distance, past shifts, hours worked, match %. These are the actual criteria coordinators use. Everything else is de-emphasized.</p></div>
+          <div class="ann"><div class="ann-dot">3</div><p><strong>Empty state is actionable</strong> — "No staff available for swap" redirects to the Matches tab. Dead ends don't exist in this system.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.5 PATIENT + STAFF PROFILES -->
+  <div id="feat-profiles" class="cw" style="margin-top:72px">
+    <div class="feat fade-in">
+      <div class="c">
+        <div class="feat-n">Feature 05 &mdash; Profile System</div>
+        <h3 class="feat-t">Patient & Staff Profiles — high density, still scannable</h3>
+        <p class="feat-d">Both profiles follow the same section-card architecture: bold colored header → labeled data sections → inline editing. The challenge was fitting certifications, care type tags, and a 2-week rotation schedule into a mobile-first layout without visual chaos. Consistency across both profile types reduces learning curve for coordinators navigating between them.</p>
+        <div class="feat-tags">
+          <span class="feat-tag">Information density</span>
+          <span class="feat-tag">Tag system</span>
+          <span class="feat-tag">Parallel structure</span>
+        </div>
+      </div>
+      <div class="img-wrap side2" style="max-width:1080px;margin-top:28px">
+        <img src="images/Patient_details_1.png" alt="Patient Profile">
+        <img src="images/Staff_details_2.png" alt="Staff Profile">
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.6 SCHEDULE SYSTEM -->
+  <div id="feat-schedule" class="cw" style="margin-top:72px">
+    <div class="feat fade-in">
+      <div class="c">
+        <div class="feat-n">Feature 06 &mdash; Schedule Intelligence</div>
+        <h3 class="feat-t">Schedule system — solving the calendar complexity problem</h3>
+        <p class="feat-d">The hardest design challenge of the internship. A single day can contain 2 or 3 separate shifts — morning, evening, night. Standard calendar dot indicators break immediately. I designed a pie-chart circle system where each day indicator visually encodes multiple shift slots through color segments and geometry, with shift-type icons underneath for time-of-day context.</p>
+        <div class="feat-tags">
+          <span class="feat-tag">Novel visual pattern</span>
+          <span class="feat-tag">Rotation-aware</span>
+          <span class="feat-tag">Multi-shift encoding</span>
+        </div>
+      </div>
+
+      <!-- Feature 101 — design spec -->
+      <div class="img-wrap" style="max-width:1080px;margin-top:28px">
+        <img src="images/feature101.png" alt="Schedule day complexity design spec" style="width:100%;max-width:820px">
+      </div>
+
+      <div class="c">
+        <div class="callout" style="margin:24px 0 28px">
+          <p>The split-circle indicator was invented, not borrowed. It needed to encode <em>shift count + time-of-day</em> simultaneously in a 32px target — no existing pattern did this.</p>
+        </div>
+      </div>
+
+      <div class="img-wrap side2" style="max-width:1080px">
+        <img src="images/Staff_Caredays_view.png" alt="Staff Care Days View">
+        <img src="images/Patient_Schedule_edit_6.png" alt="Schedule Edit modal">
+      </div>
+      <div class="c" style="margin-top:22px">
+        <div class="annots">
+          <div class="ann"><div class="ann-dot">1</div><p><strong>Circle segments</strong> represent the number of shifts on a given day — half-circle for 2 shifts, trisected for 3. Instantly scannable at a glance.</p></div>
+          <div class="ann"><div class="ann-dot">2</div><p><strong>Time-of-day icons</strong> (sun, moon, twilight) below each day circle provide the shift-time context without using labels or tooltips.</p></div>
+          <div class="ann"><div class="ann-dot">3</div><p><strong>2-week rotation</strong> is presented as two separate week rows, with the active week highlighted — reflecting how coordinators mentally model recurring care patterns.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.7 STAFF MANAGEMENT -->
+  <div id="feat-staff-mgmt" class="cw" style="margin-top:72px">
+    <div class="feat fade-in">
+      <div class="c">
+        <div class="feat-n">Feature 07 &mdash; Workforce Overview</div>
+        <h3 class="feat-t">Staff Management — 547 nurses, at a glance</h3>
+        <p class="feat-d">A dense workforce table needed to be actionable, not just informational. The key addition: an inline schedule preview column so coordinators can read a nurse's availability pattern directly from the list — without navigating to the individual profile. Summary stat cards at the top give a real-time snapshot of workforce health.</p>
+        <div class="feat-tags">
+          <span class="feat-tag">Dense table design</span>
+          <span class="feat-tag">Multi-filter architecture</span>
+          <span class="feat-tag">Inline schedule preview</span>
+        </div>
+      </div>
+      <div class="img-wrap flush" style="max-width:1080px;margin-top:28px">
+        <img src="images/Staff_management_2.png" alt="Staff Management">
+      </div>
+    </div>
+  </div>
+
+  <!-- 3.8 AUDIT LOGS -->
+  <div id="feat-audit-logs" class="cw" style="margin-top:72px">
+    <div class="feat fade-in">
+      <div class="c">
+        <div class="feat-n">Feature 08 &mdash; System Transparency</div>
+        <h3 class="feat-t">Audit Logs — making the invisible visible</h3>
+        <p class="feat-d">When AI agents act autonomously, trust erodes unless coordinators can see exactly what happened and why. The audit log design surfaces every system event — manual and AI-driven — in a searchable, faceted timeline. The "Performed by" field explicitly distinguishes between Coordinator, CareAI, Agent2, and Agent3. Accountability is built into the information architecture.</p>
+        <div class="feat-tags">
+          <span class="feat-tag">AI transparency</span>
+          <span class="feat-tag">Faceted filtering</span>
+          <span class="feat-tag">Trust design</span>
+        </div>
+      </div>
+      <div class="img-wrap flush" style="max-width:1080px;margin-top:28px">
+        <img src="images/Audit_Logs_Final_1.png" alt="Audit Logs">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     04 — VISUAL SYSTEM
+════════════════════════════════════════════ -->
+<section id="visual-system">
+  <div class="c fade-in">
+    <p class="s-label label">04 — Visual System</p>
+    <h2 class="s-title">A design language built<br><em>for trust and speed</em></h2>
+    <div class="s-body">
+      <p>Across all 11 screens, a coherent system holds everything together. These weren't aesthetic preferences — they were functional decisions grounded in how coordinators actually use the product.</p>
+    </div>
+
+    <div style="margin-top:40px">
+      <p class="label" style="margin-bottom:16px">Color semantics</p>
+      <div class="color-grid">
+        <div class="color-card">
+          <div class="color-swatch" style="background:#6D1FC7"></div>
+          <div class="color-info"><div class="color-name">Brand purple</div><div class="color-desc">Navigation, headers, primary actions, role badges</div></div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background:#16A34A"></div>
+          <div class="color-info"><div class="color-name">Filled green</div><div class="color-desc">Shift filled state, confirmed actions, Direct Assign CTAs</div></div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background:#DC2626"></div>
+          <div class="color-info"><div class="color-name">Urgent red</div><div class="color-desc">Unfilled shifts, cancellations, high-priority alerts</div></div>
+        </div>
+        <div class="color-card">
+          <div class="color-swatch" style="background:#F0EFEA;border:1px solid var(--border)"></div>
+          <div class="color-info"><div class="color-name">Neutral surface</div><div class="color-desc">Card backgrounds, section headers, inactive states</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div style="margin-top:48px">
+      <p class="label" style="margin-bottom:16px">Design principles</p>
+      <div class="principles">
+        <div class="prin-item">
+          <div class="prin-t">State over style</div>
+          <div class="prin-d">Color communicates status, not decoration. Green = filled. Red = action required. Purple = brand interaction. This hierarchy is non-negotiable across every screen.</div>
+        </div>
+        <div class="prin-item">
+          <div class="prin-t">Section-card architecture</div>
+          <div class="prin-d">Every profile uses the same pattern: colored header → labeled card sections → editable fields. Consistency across patient and staff profiles reduces cognitive switching.</div>
+        </div>
+        <div class="prin-item" style="border-top:1px solid var(--border)">
+          <div class="prin-t">Tags as a shared vocabulary</div>
+          <div class="prin-d">Certifications, care types, employment status, and shift modifiers all use the same pill/badge system — a scannable language that works identically across the product.</div>
+        </div>
+        <div class="prin-item" style="border-top:1px solid var(--border)">
+          <div class="prin-t">Actionable, never just informational</div>
+          <div class="prin-d">Every screen answers: "What do I do next?" Data without a clear action path is a UX failure. Even empty states redirect to the next step — never a dead end.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     05 — HARD CALLS
+════════════════════════════════════════════ -->
+<section id="ux-decisions">
+  <div class="c fade-in">
+    <p class="s-label label">05 — UX Decisions</p>
+    <h2 class="s-title">Three hard calls<br><em>and how I made them</em></h2>
+    <div class="s-body" style="margin-bottom:36px">
+      <p>These weren't problems with obvious answers. Each required understanding both the user's cognitive state in that moment and the system constraints underneath the surface.</p>
+    </div>
+
+    <div class="hc">
+      <div class="hc-q">How do you communicate urgency without causing decision paralysis?</div>
+      <div class="hc-a"><p>The unfilled shift state needed to feel urgent — coordinators must act — but not so alarming that they freeze. I used <strong>structural change instead of alarm patterns:</strong> the header turns red (not flashing), the action block is foregrounded (not a modal overlay), and two clear paths are offered — Manual or Auto-Assign. Urgency is expressed through prominence, not anxiety. The coordinator feels directed, not overwhelmed.</p></div>
+    </div>
+
+    <div class="hc">
+      <div class="hc-q">How do you help someone choose from 10+ nurse candidates under time pressure?</div>
+      <div class="hc-a"><p>The answer was <strong>never show 10 equals.</strong> The Swap/Matches tab split separates intent before the user sees a list. Within each tab, nurse cards show exactly four signals — distance, past shifts, hours, match %. These are the actual criteria coordinators use; everything else is visible but de-emphasized. The goal isn't a complete record. It's a fast, confident decision.</p></div>
+    </div>
+
+    <div class="hc">
+      <div class="hc-q">How do you represent a 2-week rotating schedule with 2–3 shifts per day in a 32px circle?</div>
+      <div class="hc-a"><p>Standard dot-indicator calendars break down immediately when a day has multiple shifts — they can't distinguish 1 shift from 3. I <strong>designed a pie-chart circle system</strong> where the circle is visually divided by the number of shifts it contains, each segment color-coded by time-of-day. Coordinators can read an entire two-week rotation in a single glance without opening any sub-components. Density, finally made scannable.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     06 — REFLECTION
+════════════════════════════════════════════ -->
+<section id="reflection">
+  <div class="c fade-in">
+    <p class="s-label label">06 — Reflection</p>
+    <h2 class="s-title">What I learned</h2>
+    <div class="reflect-body">
+      <p>The most important design decision I made in these 4 months wasn't a colour choice or a layout — it was the decision to <em>understand the system before opening Figma.</em></p>
+      <p>Quickflows.ai taught me that enterprise UX lives and dies by its state model. Every screen is a projection of an underlying entity graph, and if the designer doesn't understand that graph, the UI will mislead the people relying on it.</p>
+      <p>I also learned that <em>density is not the enemy of clarity</em> — it's the friend of experts. A coordinator managing 200 shifts a day doesn't want a simplified view. They want the right information, structured so they can move at speed. Designing for that is harder than designing for simplicity. And significantly more rewarding.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════ -->
+<footer>
+  <div class="c" style="text-align:center">
+    <p style="margin-bottom:8px">Suryakanta Jena &nbsp;&middot;&nbsp; Product Design Intern &nbsp;&middot;&nbsp; Quickflows.ai &nbsp;&middot;&nbsp; Aug&ndash;Dec 2025</p>
+    <p><a href="#" onclick="window.scrollTo({top:0,behavior:'smooth'});return false">Back to top &uarr;</a></p>
+  </div>
+</footer>
+
+<script>
+// Scroll-triggered fade in
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+</script>
+<script src="sidebar.js"></script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+/* ═══════════════════════════════════════════════════
+   sidebar.css — left navigation panel
+   ═══════════════════════════════════════════════════ */
+
+:root {
+  --sb-width: 224px;
+  --nav-h: 53px; /* matches nav padding + content height */
+}
+
+/* ── Body offset on desktop ────────────────────────── */
+@media (min-width: 901px) {
+  body {
+    padding-left: var(--sb-width);
+  }
+}
+
+/* ── Sidebar shell ─────────────────────────────────── */
+#sidebar {
+  position: fixed;
+  top: var(--nav-h);
+  left: 0;
+  width: var(--sb-width);
+  height: calc(100vh - var(--nav-h));
+  overflow-y: auto;
+  overflow-x: hidden;
+  background: var(--bg);
+  border-right: 1px solid var(--border);
+  z-index: 90;
+  padding: 28px 0 40px;
+  scrollbar-width: none; /* Firefox */
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+#sidebar::-webkit-scrollbar { display: none; }
+
+/* ── Nav list ──────────────────────────────────────── */
+.sb-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+/* ── Base item ─────────────────────────────────────── */
+.sb-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 7px 20px;
+  font-family: var(--sans);
+  font-size: 12.5px;
+  font-weight: 400;
+  color: var(--muted);
+  text-decoration: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  line-height: 1.4;
+  border-left: 2px solid transparent;
+  transition: color 0.18s, border-color 0.18s, background 0.18s;
+  position: relative;
+}
+.sb-item:hover {
+  color: var(--text);
+  background: var(--bg-2);
+}
+
+/* ── Section-level items (dot) ─────────────────────── */
+.sb-section {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.sb-dot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+  flex-shrink: 0;
+  transition: background 0.18s;
+}
+
+/* ── Active state ──────────────────────────────────── */
+.sb-item.is-active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: var(--accent-2);
+  font-weight: 500;
+}
+.sb-item.is-active .sb-dot {
+  background: var(--accent);
+}
+
+/* ── Expandable group ──────────────────────────────── */
+.sb-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.sb-expandable {
+  justify-content: space-between;
+}
+
+/* Chevron icon */
+.sb-chevron {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  color: var(--muted);
+  transition: transform 0.25s ease, color 0.18s;
+  margin-left: auto;
+}
+.sb-expandable[aria-expanded="true"] .sb-chevron {
+  transform: rotate(90deg);
+  color: var(--accent);
+}
+.sb-expandable[aria-expanded="true"] {
+  color: var(--text);
+}
+
+/* ── Children container ────────────────────────────── */
+.sb-children {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  /* subtle left guide line */
+  margin-left: 24px;
+  border-left: 1px solid var(--border);
+}
+.sb-children.is-open {
+  max-height: 600px; /* large enough for all 8 items */
+}
+
+/* ── Child items ───────────────────────────────────── */
+.sb-child {
+  font-size: 12px;
+  font-weight: 400;
+  padding: 6px 14px;
+  color: var(--muted);
+  border-left: 2px solid transparent;
+  margin-left: -1px; /* overlap the guide line */
+}
+.sb-child:hover {
+  color: var(--accent);
+  background: var(--accent-2);
+}
+.sb-child.is-active {
+  color: var(--accent);
+  border-left-color: var(--accent);
+  background: var(--accent-2);
+  font-weight: 500;
+}
+
+/* ── Divider ───────────────────────────────────────── */
+.sb-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 10px 20px;
+}
+
+/* ── Hamburger button ──────────────────────────────── */
+#sb-hamburger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+#sb-hamburger:hover { background: var(--bg-2); }
+#sb-hamburger svg { display: block; }
+
+/* ── Overlay ───────────────────────────────────────── */
+#sidebar-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 25, 23, 0.35);
+  z-index: 89;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+#sidebar-overlay.is-visible {
+  opacity: 1;
+}
+
+/* ══════════════════════════════════════════════════════
+   RESPONSIVE — mobile and tablet
+   ══════════════════════════════════════════════════════ */
+@media (max-width: 900px) {
+
+  /* Hide sidebar off-screen by default */
+  #sidebar {
+    top: 0;
+    height: 100vh;
+    transform: translateX(calc(-1 * var(--sb-width) - 4px));
+    box-shadow: none;
+    padding-top: 60px;
+  }
+
+  /* Sidebar open */
+  #sidebar.is-open {
+    transform: translateX(0);
+    box-shadow: 4px 0 24px rgba(0,0,0,0.10);
+  }
+
+  /* Show overlay when sidebar is open */
+  #sidebar-overlay.is-visible {
+    display: block;
+  }
+
+  /* Show hamburger */
+  #sb-hamburger {
+    display: flex;
+  }
+}
+
+/* ── Ensure overlay is only a block when visible ───── */
+#sidebar-overlay { display: none; }
+#sidebar-overlay.is-visible { display: block; }
