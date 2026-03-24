@@ -1,0 +1,16 @@
+{
+  "version": 2,
+  "routes": [
+    {
+      "src": "/password.html",
+      "dest": "/password.html",
+      "headers": {
+        "Cache-Control": "no-store"
+      }
+    },
+    {
+      "src": "/api/auth",
+      "dest": "/api/auth"
+    }
+  ]
+}
