@@ -1,27 +1,26 @@
-import { NextResponse } from 'next/server';
+// No framework imports — pure Web Standard APIs (works on Vercel Edge for static sites)
 
 // Pages that are always accessible (no auth required)
 const PUBLIC_PATHS = ['/password.html', '/api/auth'];
 
-export async function middleware(request) {
-  const { pathname } = request.nextUrl;
+export default async function middleware(request) {
+  const { pathname } = new URL(request.url);
 
-  // Allow public paths through
+  // Allow public paths through (returning undefined = pass-through)
   if (PUBLIC_PATHS.some((p) => pathname.startsWith(p))) {
-    return NextResponse.next();
+    return;
   }
 
-  // Check for a valid signed auth cookie
-  const token = request.cookies.get('auth_token')?.value;
+  // Read the auth_token cookie from the request headers
+  const cookieHeader = request.headers.get('cookie') ?? '';
+  const token = getCookieValue(cookieHeader, 'auth_token');
 
   if (token && await isValidToken(token, process.env.COOKIE_SECRET)) {
-    return NextResponse.next(); // authenticated — serve normally
+    return; // authenticated — pass-through, serve the static file
   }
 
   // Not authenticated — redirect to password gate
-  const url = request.nextUrl.clone();
-  url.pathname = '/password.html';
-  return NextResponse.redirect(url);
+  return Response.redirect(new URL('/password.html', request.url), 302);
 }
 
 /**
@@ -53,12 +52,18 @@ async function isValidToken(token, secret) {
   }
 }
 
+function getCookieValue(cookieHeader, name) {
+  const match = cookieHeader.split(';').map((c) => c.trim()).find((c) => c.startsWith(name + '='));
+  return match ? match.slice(name.length + 1) : null;
+}
+
 function base64ToBytes(b64) {
   const bin = atob(b64);
   const bytes = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
   return bytes;
 }
+
 
 export const config = {
   // Run on every path except Next.js internals and static assets
