@@ -9,7 +9,8 @@
 
 /* ── Body offset on desktop ────────────────────────── */
 @media (min-width: 901px) {
-  body {
+  /* Nav is a direct child of body (no left padding) → spans full viewport width */
+  .page-body {
     padding-left: var(--sb-width);
   }
 }
