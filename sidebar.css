@@ -163,20 +163,29 @@
 /* ── Hamburger button ──────────────────────────────── */
 #sb-hamburger {
   display: none;
+  position: fixed;
+  top: calc(var(--nav-h) - 6px);
+  left: 12px;
+  z-index: 102;
   align-items: center;
   justify-content: center;
   width: 36px;
   height: 36px;
-  background: none;
+  background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 8px;
   cursor: pointer;
   padding: 0;
-  flex-shrink: 0;
-  transition: background 0.15s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  transition: background 0.15s, opacity 0.2s;
 }
 #sb-hamburger:hover { background: var(--bg-2); }
 #sb-hamburger svg { display: block; }
+/* Hide hamburger when sidebar is open — tap overlay to close */
+#sb-hamburger[aria-expanded="true"] {
+  opacity: 0;
+  pointer-events: none;
+}
 
 /* ── Overlay ───────────────────────────────────────── */
 #sidebar-overlay {
@@ -197,13 +206,12 @@
    ══════════════════════════════════════════════════════ */
 @media (max-width: 900px) {
 
-  /* Hide sidebar off-screen by default */
+  /* Sidebar slides in below the sticky nav — content is never hidden */
   #sidebar {
-    top: 0;
-    height: 100vh;
+    top: var(--nav-h);
+    height: calc(100vh - var(--nav-h));
     transform: translateX(calc(-1 * var(--sb-width) - 4px));
     box-shadow: none;
-    padding-top: 60px;
   }
 
   /* Sidebar open */
