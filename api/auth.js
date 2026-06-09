@@ -27,11 +27,10 @@ export default async function handler(req, res) {
   }
 
   const correctPassword = process.env.SITE_PASSWORD;
-  const cookieSecret   = process.env.COOKIE_SECRET ?? 'fallback-secret';
+  const cookieSecret   = process.env.COOKIE_SECRET;
 
-  if (!correctPassword) {
-    // SITE_PASSWORD not configured — fail safely
-    console.error('[auth] SITE_PASSWORD environment variable is not set.');
+  if (!correctPassword || !cookieSecret) {
+    console.error('[auth] SITE_PASSWORD or COOKIE_SECRET environment variable is not set.');
     return res.redirect(302, '/password.html?error=config');
   }
 

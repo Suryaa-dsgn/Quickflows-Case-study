@@ -32,7 +32,8 @@ async function isValidToken(token, secret) {
     const [payloadB64, sigB64] = token.split('.');
     if (!payloadB64 || !sigB64) return false;
 
-    const keyData = new TextEncoder().encode(secret || 'fallback-secret');
+    if (!secret) return false;
+    const keyData = new TextEncoder().encode(secret);
     const key = await crypto.subtle.importKey(
       'raw', keyData, { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']
     );
@@ -46,6 +47,7 @@ async function isValidToken(token, secret) {
     // Optionally check expiry (24 hours)
     const payload = JSON.parse(atob(payloadB64));
     const elapsed = Date.now() - payload.ts;
+    if (elapsed < 0) return false;
     return elapsed < 24 * 60 * 60 * 1000; // 24 h
   } catch {
     return false;
